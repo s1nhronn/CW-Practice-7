@@ -45,6 +45,15 @@ bool testSwap()
   return r[0] == 1 && v[0] == 2;
 }
 
+bool testPushFront()
+{
+  topit::Vector< int > v;
+  v.pushBack(1);
+  v.pushBack(2);
+  v.pushFront(3);
+  return v[0] == 3 && v[1] == 1 && v[2] == 2;
+}
+
 int main()
 {
   using test_t = bool (*)();
@@ -53,7 +62,8 @@ int main()
                     {"Vector with any value is not empty", testVectorWithValue},
                     {"Inbound access elements", testElementAccess},
                     {"Sizes must be equal as elements", testCopyConstructor},
-                    {"The data is valid when swapping places", testSwap}};
+                    {"The data is valid when swapping places", testSwap},
+                    {"The element should be added to the beginning", testPushFront}};
   const size_t count = sizeof(tests) / sizeof(pair_t);
   std::cout << std::boolalpha;
   bool pass = true;
