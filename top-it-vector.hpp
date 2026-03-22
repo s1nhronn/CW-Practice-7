@@ -2,6 +2,7 @@
 #define TOP_IT_VECTOR_HPP
 #include <cassert>
 #include <cstddef>
+#include <stdexcept>
 #include <utility>
 
 namespace topit
@@ -38,6 +39,12 @@ namespace topit
 template < class T >
 void topit::Vector< T >::popBack()
 {
+  if (size_ == 0)
+  {
+    throw std::out_of_range("Vector is empty");
+  }
+  data_[size_ - 1].~T();
+  --size_;
 }
 
 template < class T >
