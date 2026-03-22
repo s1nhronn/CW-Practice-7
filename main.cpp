@@ -1,5 +1,6 @@
 #include "top-it-vector.hpp"
 #include <iostream>
+#include <stdexcept>
 
 bool testDefaultVector()
 {
@@ -97,6 +98,38 @@ bool testSizeWithValue()
   return v.getSize() == 1;
 }
 
+bool testPopWithEmptyVector()
+{
+  topit::Vector< int > v;
+  try
+  {
+    v.popBack();
+  }
+  catch (const std::out_of_range&)
+  {
+    return true;
+  }
+  return false;
+}
+
+bool testPopWithOneValue()
+{
+  topit::Vector< int > v;
+  v.pushBack(1);
+  v.popBack();
+  return v.isEmpty();
+}
+
+bool testPopWithMoreValues()
+{
+  topit::Vector< int > v;
+  v.pushBack(1);
+  v.pushBack(2);
+  v.pushBack(3);
+  v.popBack();
+  return v.getSize() == 2 && v[0] == 1 && v[1] == 2;
+}
+
 int main()
 {
   using test_t = bool (*)();
@@ -111,7 +144,10 @@ int main()
                     {"Capacity of the empty vector is 0", testCapacityOfEmpty},
                     {"Capacity of a non-empty vector is correct", testCapacityWithValue},
                     {"Size of the empty vector is 0", testSizeOFEmpty},
-                    {"Size of a non-empty vector is correct", testSizeWithValue}};
+                    {"Size of a non-empty vector is correct", testSizeWithValue},
+                    {"Deleting from an empty vector generates a certain exception", testPopWithEmptyVector},
+                    {"Deleting a vector with one value makes it empty.", testPopWithOneValue},
+                    {"Deleting from a vector reduces its size and keeps the data correct", testPopWithMoreValues}};
   const size_t count = sizeof(tests) / sizeof(pair_t);
   std::cout << std::boolalpha;
   bool pass = true;
