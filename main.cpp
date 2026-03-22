@@ -62,6 +62,13 @@ bool testDoublePushFront()
   return v[0] == 2 && v[1] == 1;
 }
 
+bool testCorrectOfCapacity()
+{
+  topit::Vector< int > v;
+  v.pushBack(1);
+  return v.getCapacity() == 1;
+}
+
 int main()
 {
   using test_t = bool (*)();
