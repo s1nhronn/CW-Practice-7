@@ -85,7 +85,9 @@ int main()
                     {"Sizes must be equal as elements", testCopyConstructor},
                     {"The data is valid when swapping places", testSwap},
                     {"The element should be added to the beginning", testPushFront},
-                    {"Correctly adding two elements to the beginning", testDoublePushFront}};
+                    {"Correctly adding two elements to the beginning", testDoublePushFront},
+                    {"Capacity of the empty vector is 0", testCapacityOfEmpty},
+                    {"Capacity of a non-empty vector is correct", testCapacityWithValue}};
   const size_t count = sizeof(tests) / sizeof(pair_t);
   std::cout << std::boolalpha;
   bool pass = true;
