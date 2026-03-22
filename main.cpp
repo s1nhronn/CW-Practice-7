@@ -75,6 +75,19 @@ bool testCapacityWithValue()
   return v.getCapacity() == 1;
 }
 
+bool testSizeOFEmpty()
+{
+  topit::Vector< int > v;
+  return !v.getSize();
+}
+
+bool testSizeWithValue()
+{
+  topit::Vector< int > v;
+  v.pushBack(1);
+  return v.getSize() == 1;
+}
+
 int main()
 {
   using test_t = bool (*)();
@@ -87,7 +100,9 @@ int main()
                     {"The element should be added to the beginning", testPushFront},
                     {"Correctly adding two elements to the beginning", testDoublePushFront},
                     {"Capacity of the empty vector is 0", testCapacityOfEmpty},
-                    {"Capacity of a non-empty vector is correct", testCapacityWithValue}};
+                    {"Capacity of a non-empty vector is correct", testCapacityWithValue},
+                    {"Size of the empty vector is 0", testSizeOFEmpty},
+                    {"Size of a non-empty vector is correct", testSizeWithValue}};
   const size_t count = sizeof(tests) / sizeof(pair_t);
   std::cout << std::boolalpha;
   bool pass = true;
