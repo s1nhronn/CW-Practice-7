@@ -36,6 +36,11 @@ namespace topit
 }
 
 template < class T >
+void topit::Vector< T >::popBack()
+{
+}
+
+template < class T >
 size_t topit::Vector< T >::getCapacity() const noexcept
 {
   return capacity_;
