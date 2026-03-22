@@ -38,9 +38,9 @@ namespace topit
 template < class T >
 void topit::Vector< T >::pushFront(const T& val)
 {
-  Vector< T > cpy(val.getSize + 1);
+  Vector< T > cpy(size_ + 1);
   cpy[0] = val;
-  for (size_t i = 0; i < cpy.getSize(); ++i)
+  for (size_t i = 1; i < cpy.getSize(); ++i)
   {
     cpy[i] = (*this)[i - 1];
   }
@@ -59,14 +59,14 @@ template < class T >
 T& topit::Vector< T >::operator[](size_t id) noexcept
 {
   assert(id < getSize());
-  return data_[0];
+  return data_[id];
 }
 
 template < class T >
 const T& topit::Vector< T >::operator[](size_t id) const noexcept
 {
   assert(id < getSize());
-  return data_[0];
+  return data_[id];
 }
 
 template < class T >
@@ -115,8 +115,15 @@ topit::Vector< T >::~Vector()
 }
 
 template < class T >
-void topit::Vector< T >::pushBack(const T&)
+void topit::Vector< T >::pushBack(const T& val)
 {
+  Vector< T > cpy(size_ + 1);
+  cpy[size_] = val;
+  for (size_t i = 0; i < size_; ++i)
+  {
+    cpy[i] = (*this)[i];
+  }
+  swap(cpy);
 }
 
 #endif
