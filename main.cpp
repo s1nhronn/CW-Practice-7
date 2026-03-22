@@ -65,7 +65,7 @@ bool testDoublePushFront()
 bool testCapacityOfEmpty()
 {
   topit::Vector< int > v;
-  return v.getCapacity();
+  return !v.getCapacity();
 }
 
 bool testCapacityWithValue()
