@@ -121,15 +121,8 @@ topit::Vector< T >::~Vector()
 }
 
 template < class T >
-void topit::Vector< T >::pushBack(const T& val)
+void topit::Vector< T >::pushBack(const T&)
 {
-  Vector< T > cpy(size_ + 1);
-  cpy[size_] = val;
-  for (size_t i = 0; i < size_; ++i)
-  {
-    cpy[i] = (*this)[i];
-  }
-  swap(cpy);
 }
 
 #endif

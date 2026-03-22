@@ -75,6 +75,15 @@ bool testCapacityWithValue()
   return v.getCapacity() == 1;
 }
 
+bool testCapacityWithMoreValues()
+{
+  topit::Vector< int > v;
+  v.pushBack(1);
+  v.pushBack(2);
+  v.pushBack(3);
+  return v.getCapacity() == 4;
+}
+
 bool testSizeOFEmpty()
 {
   topit::Vector< int > v;
