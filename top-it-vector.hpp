@@ -2,6 +2,7 @@
 #define TOP_IT_VECTOR_HPP
 #include <cassert>
 #include <cstddef>
+#include <memory>
 #include <stdexcept>
 #include <utility>
 
@@ -106,7 +107,23 @@ topit::Vector< T >::Vector(size_t k):
 template < class T >
 topit::Vector< T >& topit::Vector< T >::operator=(const Vector< T >& rhs)
 {
+  if (this == std::addressof(rhs))
+  {
+    return *this;
+  }
   Vector< T > cpy(rhs);
+  swap(cpy);
+  return *this;
+}
+
+template < class T >
+topit::Vector< T >& topit::Vector< T >::operator=(Vector< T >&& rhs) noexcept
+{
+  if (this == std::addressof(rhs))
+  {
+    return *this;
+  }
+  Vector< T > cpy(std::move(rhs));
   swap(cpy);
   return *this;
 }
