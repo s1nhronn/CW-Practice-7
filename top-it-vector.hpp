@@ -6,6 +6,10 @@
 #include <stdexcept>
 #include <utility>
 
+// Домашнее задание
+// 1. Реализовать итераторы для вектора
+// 2. Придумать еще 3 insert (один уже есть) и 3 erase, но с итераторами
+// 3. 
 namespace topit
 {
   template < class T >
@@ -27,10 +31,24 @@ namespace topit
 
     T& operator[](size_t id) noexcept;
     const T& operator[](size_t id) const noexcept;
+    T& at(size_t id);
+    const T& at(size_t id) const;
 
     void pushBack(const T&);
     void popBack();
     void pushFront(const T&);
+    void popFront();
+
+    // Классная работа
+    // Строгая гарантия, copy-and-swap, тесты
+    void insert(size_t i, const T& val);
+    void erase(size_t i);
+    void insert(size_t i, const Vector< T >& rhs, size_t beg, size_t end);
+    void erase(size_t beg, size_t end);
+
+    // Вместо VecIterator свой итератор
+    template < class VecIterator, class FwdIterator >
+    void insert(VecIterator pos, FwdIterator beg, FwdIterator end); // один из методов
 
   private:
     T* data_;
@@ -80,8 +98,9 @@ void topit::Vector< T >::swap(Vector< T >& rhs) noexcept
 template < class T >
 T& topit::Vector< T >::operator[](size_t id) noexcept
 {
-  assert(id < getSize());
-  return data_[id];
+  const Vector< T >* cthis = this;
+  const T& ret = (*cthis)[id];
+  return const_cast< T& >(ret);
 }
 
 template < class T >
@@ -89,6 +108,25 @@ const T& topit::Vector< T >::operator[](size_t id) const noexcept
 {
   assert(id < getSize());
   return data_[id];
+}
+
+template < class T >
+T& topit::Vector< T >::at(size_t id)
+{
+  const Vector< T >* cthis = this;
+  const T& ret = cthis->at(id);
+  return const_cast< T& >(ret);
+  // return const_cast< T& >(static_cast< const Vector< T >* >(this)->at(id))
+}
+
+template < class T >
+const T& topit::Vector< T >::at(size_t id) const
+{
+  if (id > getSize())
+  {
+    return (*this)[id];
+  }
+  throw std::range_error("bad id");
 }
 
 template < class T >

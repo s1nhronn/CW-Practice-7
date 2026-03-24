@@ -23,6 +23,82 @@ bool testElementAccess()
   return v[0] == 1 && v[1] == 2;
 }
 
+bool testElementConstAccess()
+{
+  topit::Vector< int > v;
+  v.pushBack(1);
+  v.pushBack(2);
+  const topit::Vector< int >& rv = v;
+  return rv[0] == 1 && rv[1] == 2;
+}
+
+bool testElementOutOfBoundCheckedAccess()
+{
+  topit::Vector< int > v;
+  try
+  {
+    v.at(0);
+    return false;
+  }
+  catch (const std::out_of_range&)
+  {
+    return true;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
+bool testElementInboundCheckedAccess()
+{
+  topit::Vector< int > v;
+  v.pushBack(1);
+  try
+  {
+    int& val = v.at(0);
+    return val == 1;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
+bool testElementOutOfBoundCheckedConstAccess()
+{
+  const topit::Vector< int > v;
+  try
+  {
+    v.at(0);
+    return false;
+  }
+  catch (const std::out_of_range&)
+  {
+    return true;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
+bool testElementInboundCheckedConstAccess()
+{
+  topit::Vector< int > v;
+  v.pushBack(1);
+  const topit::Vector< int >& rv = v;
+  try
+  {
+    const int& val = rv.at(0);
+    return val == 1;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
 bool testCopyConstructor()
 {
   topit::Vector< int > v;
