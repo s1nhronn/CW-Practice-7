@@ -1,6 +1,6 @@
-#include "top-it-vector.hpp"
 #include <iostream>
 #include <stdexcept>
+#include "top-it-vector.hpp"
 
 bool testDefaultVector()
 {
