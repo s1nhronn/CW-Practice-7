@@ -590,6 +590,96 @@ bool testInsertRangeEndOutOfRange()
   }
 }
 
+bool testEraseRangeFromEmptyVector()
+{
+  topit::Vector< int > v;
+  try
+  {
+    v.erase(0, 1);
+    return false;
+  }
+  catch (const std::out_of_range&)
+  {
+    return true;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
+bool testEraseRangeFromVectorWithOneValue()
+{
+  topit::Vector< int > v;
+  v.pushBack(1);
+  try
+  {
+    v.erase(0, 1);
+    return v.isEmpty();
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
+bool testEraseRangeFromVectorWithManyValues()
+{
+  topit::Vector< int > v;
+  v.pushBack(1);
+  v.pushBack(2);
+  v.pushBack(3);
+  v.pushBack(4);
+  v.pushBack(5);
+  try
+  {
+    v.erase(1, 4);
+    return v[0] == 1 && v[1] == 5;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
+bool testEraseRangeWhenEndMoreThanSize()
+{
+  topit::Vector< int > v;
+  v.pushBack(1);
+  v.pushBack(2);
+  try
+  {
+    v.erase(0, 5);
+    return false;
+  }
+  catch (const std::range_error&)
+  {
+    return true;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
+bool testEraseRangeWhenBeginMoreThanEnd()
+{
+  topit::Vector< int > v;
+  try
+  {
+    v.erase(1, 0);
+    return false;
+  }
+  catch (const std::range_error&)
+  {
+    return true;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
 int main()
 {
   using test_t = bool (*)();
@@ -632,7 +722,12 @@ int main()
       {"Insert in vector with size more than paste range from v2", testInsertRangeV1SizeMoreV2Range},
       {"Insert range in vector when index more than size throw an exception", testInsertRangeIndexOutOfRange},
       {"Insert range in vector when begin more than end throw an exception", testInsertRangeBeginMoreThanEnd},
-      {"Insert range in vector when end more than size throw an exception", testInsertRangeEndOutOfRange}};
+      {"Insert range in vector when end more than size throw an exception", testInsertRangeEndOutOfRange},
+      {"Erase range from empty vector throw an exception", testEraseRangeFromEmptyVector},
+      {"Erase range from vector with one value make it empty", testEraseRangeFromVectorWithOneValue},
+      {"Erase range from vector with many values is correct", testEraseRangeFromVectorWithManyValues},
+      {"Erase range when end more than size throw an exception", testEraseRangeWhenEndMoreThanSize},
+      {"Erase range when begin more than end throw an exception", testEraseRangeWhenBeginMoreThanEnd}};
   const size_t count = sizeof(tests) / sizeof(pair_t);
   std::cout << std::boolalpha;
   bool pass = true;
