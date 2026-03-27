@@ -174,7 +174,7 @@ bool testSizeWithValue()
   return v.getSize() == 1;
 }
 
-bool testPopWithEmptyVector()
+bool testPopBackWithEmptyVector()
 {
   topit::Vector< int > v;
   try
@@ -188,7 +188,7 @@ bool testPopWithEmptyVector()
   return false;
 }
 
-bool testPopWithOneValue()
+bool testPopBackWithOneValue()
 {
   topit::Vector< int > v;
   v.pushBack(1);
@@ -196,7 +196,7 @@ bool testPopWithOneValue()
   return v.isEmpty();
 }
 
-bool testPopWithMoreValues()
+bool testPopBackWithMoreValues()
 {
   topit::Vector< int > v;
   v.pushBack(1);
@@ -204,6 +204,38 @@ bool testPopWithMoreValues()
   v.pushBack(3);
   v.popBack();
   return v.getSize() == 2 && v[0] == 1 && v[1] == 2;
+}
+
+bool testPopFrontWithEmptyVector()
+{
+  topit::Vector< int > v;
+  try
+  {
+    v.popFront();
+    return false;
+  }
+  catch (const std::out_of_range&)
+  {
+    return true;
+  }
+}
+
+bool testPopFrontWithOneValue()
+{
+  topit::Vector< int > v;
+  v.pushBack(1);
+  v.popFront();
+  return v.isEmpty();
+}
+
+bool testPopFrontWithMoreValues()
+{
+  topit::Vector< int > v;
+  v.pushBack(1);
+  v.pushBack(2);
+  v.pushBack(3);
+  v.popFront();
+  return v[0] == 2 && v[1] == 3;
 }
 
 int main()
@@ -222,9 +254,12 @@ int main()
       {"Capacity of a non-empty vector is correct", testCapacityWithValue},
       {"Size of the empty vector is 0", testSizeOFEmpty},
       {"Size of a non-empty vector is correct", testSizeWithValue},
-      {"Deleting from an empty vector generates a certain exception", testPopWithEmptyVector},
-      {"Deleting a vector with one value makes it empty.", testPopWithOneValue},
-      {"Deleting from a vector reduces its size and keeps the data correct", testPopWithMoreValues},
+      {"Deleting from an empty vector generates a certain exception (popBack)", testPopBackWithEmptyVector},
+      {"Deleting a vector with one value makes it empty (popBack)", testPopBackWithOneValue},
+      {"Deleting from a vector reduces its size and keeps the data correct (popBack)", testPopBackWithMoreValues},
+      {"Deleting from an empty vector generates a certain exception (popFront)", testPopFrontWithEmptyVector},
+      {"Deleting a vector with one value makes it empty (popFront)", testPopFrontWithOneValue},
+      {"Deleting from a vector reduces its size and keeps the data correct (popFront)", testPopFrontWithMoreValues},
       {"The correct expansion of the array capacity by 2 times is expected", testCapacityWithMoreValues},
       {"If an element exists, it returns the correct answer in a const vector", testElementInboundCheckedConstAccess},
       {"at(0) will throw an exception for an empty const vector", testElementOutOfBoundCheckedConstAccess},
