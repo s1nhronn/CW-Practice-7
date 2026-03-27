@@ -264,6 +264,23 @@ bool testInsertValueInVectorWithManyValues()
   return v[0] == 1 && v[1] == 4 && v[2] == 2 && v[3] == 3;
 }
 
+bool testInsertValueOutOfRange()
+{
+  topit::Vector< int > v;
+  v.pushBack(1);
+  v.pushBack(2);
+  v.pushBack(3);
+  try
+  {
+    v.insert(10, 1);
+    return false;
+  }
+  catch (const std::out_of_range&)
+  {
+    return true;
+  }
+}
+
 int main()
 {
   using test_t = bool (*)();
@@ -294,7 +311,8 @@ int main()
       {"Inbound access elements in const vector", testElementConstAccess},
       {"Inserting into an empty vector", testInsertValueInEmptyVector},
       {"Inserting at the beginning and end of a vector with a single value", testInsertValueInVectorWithOneValue},
-      {"insertion into the vector", testInsertValueInVectorWithManyValues}};
+      {"Insertion into the vector", testInsertValueInVectorWithManyValues},
+      {"Inserting an element outside the border throws an exception", testInsertValueOutOfRange}};
   const size_t count = sizeof(tests) / sizeof(pair_t);
   std::cout << std::boolalpha;
   bool pass = true;
