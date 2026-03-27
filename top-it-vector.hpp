@@ -59,6 +59,12 @@ namespace topit
 }
 
 template < class T >
+void topit::Vector< T >::erase(size_t)
+{
+  return;
+}
+
+template < class T >
 void topit::Vector< T >::insert(size_t i, const T& val)
 {
   if (i > size_)
