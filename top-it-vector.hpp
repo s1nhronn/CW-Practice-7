@@ -59,6 +59,12 @@ namespace topit
 }
 
 template < class T >
+void topit::Vector< T >::insert(size_t, const T&)
+{
+  return;
+}
+
+template < class T >
 void topit::Vector< T >::popBack()
 {
   if (size_ == 0)
