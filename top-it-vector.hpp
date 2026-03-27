@@ -104,9 +104,15 @@ namespace topit
 }
 
 template < class T >
-bool topit::VIter< T >::operator==(const VIter< T >&) const noexcept
+bool topit::VIter< T >::operator==(const VIter< T >& rhs) const noexcept
 {
-  return false;
+  return (std::addressof(this->v_) == std::addressof(rhs.v_)) && (this->pos_ == rhs.pos_);
+}
+
+template < class T >
+bool topit::VIter< T >::operator!=(const VIter< T >& rhs) const noexcept
+{
+  return !(*this == rhs);
 }
 
 template < class T >
