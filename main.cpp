@@ -450,7 +450,7 @@ bool testInsertRangeInEmpty()
   try
   {
     v2.insert(0, v1, 0, 2);
-    return v1[0] == 1 && v1[1] == 2;
+    return !v2.isEmpty() && v2[0] == 1 && v2[1] == 2;
   }
   catch (...)
   {
