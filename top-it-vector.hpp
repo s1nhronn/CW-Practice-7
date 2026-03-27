@@ -17,7 +17,7 @@ namespace topit
   template < class T >
   struct VIter
   {
-    explicit VIter(Vector< T >& v);
+    explicit VIter(Vector< T >& v, size_t pos);
     bool operator==(const VIter< T >&) const noexcept;
     bool operator!=(const VIter< T >&) const noexcept;
     VIter< T >& operator++();
@@ -28,7 +28,10 @@ namespace topit
 
   private:
     Vector< T >& v_;
+    size_t pos_;
   };
+
+  // нужно сделать также VCIter
 
   template < class T >
   struct Vector
@@ -80,8 +83,21 @@ namespace topit
 }
 
 template < class T >
-topit::VIter< T >::VIter(Vector< T >& v):
-  v_(v)
+topit::VIter< T > topit::Vector< T >::begin()
+{
+  return VIter< T >(*this, 0);
+}
+
+template < class T >
+topit::VIter< T > topit::Vector< T >::end()
+{
+  return VIter< T >(*this, size_);
+}
+
+template < class T >
+topit::VIter< T >::VIter(Vector< T >& v, size_t pos):
+  v_(v),
+  pos_(pos)
 {}
 
 template < class T >
