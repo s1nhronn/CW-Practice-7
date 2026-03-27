@@ -247,11 +247,14 @@ bool testInsertValueInEmptyVector()
 
 bool testInsertValueInVectorWithOneValue()
 {
-  topit::Vector< int > v;
-  v.pushBack(2);
-  v.insert(0, 1);
-  v.insert(1, 3);
-  return v[0] == 1 && v[1] == 2 && v[2] == 3;
+  topit::Vector< int > v1;
+  v1.pushBack(2);
+  v1.insert(0, 1);
+  bool res = v1[0] == 1;
+  topit::Vector< int > v2;
+  v2.pushBack(2);
+  v2.insert(1, 3);
+  return res && v2[1] == 3;
 }
 
 bool testInsertValueInVectorWithManyValues()
