@@ -107,7 +107,31 @@ topit::VCIter< T > topit::Vector< T >::cbegin() const
 }
 
 template < class T >
+topit::VCIter< T > topit::Vector< T >::begin() const
+{
+  return cbegin();
+}
+
+template < class T >
+topit::VIter< T > topit::Vector< T >::begin()
+{
+  return VIter< T >(*this, 0);
+}
+
+template < class T >
 topit::VCIter< T > topit::Vector< T >::cend() const
+{
+  return VCIter< T >(*this, size_);
+}
+
+template < class T >
+topit::VCIter< T > topit::Vector< T >::end() const
+{
+  return cend();
+}
+
+template < class T >
+topit::VIter< T > topit::Vector< T >::end()
 {
   return VCIter< T >(*this, size_);
 }
