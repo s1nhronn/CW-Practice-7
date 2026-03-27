@@ -122,11 +122,11 @@ T& topit::Vector< T >::at(size_t id)
 template < class T >
 const T& topit::Vector< T >::at(size_t id) const
 {
-  if (id > getSize())
+  if (getSize() && id < getSize())
   {
     return (*this)[id];
   }
-  throw std::range_error("bad id");
+  throw std::out_of_range("bad id");
 }
 
 template < class T >

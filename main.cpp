@@ -210,20 +210,27 @@ int main()
 {
   using test_t = bool (*)();
   using pair_t = std::pair< const char*, test_t >;
-  pair_t tests[] = {{"Default vector should be empty", testDefaultVector},
-                    {"Vector with any value is not empty", testVectorWithValue},
-                    {"Inbound access elements", testElementAccess},
-                    {"Sizes must be equal as elements", testCopyConstructor},
-                    {"The data is valid when swapping places", testSwap},
-                    {"The element should be added to the beginning", testPushFront},
-                    {"Correctly adding two elements to the beginning", testDoublePushFront},
-                    {"Capacity of the empty vector is 0", testCapacityOfEmpty},
-                    {"Capacity of a non-empty vector is correct", testCapacityWithValue},
-                    {"Size of the empty vector is 0", testSizeOFEmpty},
-                    {"Size of a non-empty vector is correct", testSizeWithValue},
-                    {"Deleting from an empty vector generates a certain exception", testPopWithEmptyVector},
-                    {"Deleting a vector with one value makes it empty.", testPopWithOneValue},
-                    {"Deleting from a vector reduces its size and keeps the data correct", testPopWithMoreValues}};
+  pair_t tests[] = {
+      {"Default vector should be empty", testDefaultVector},
+      {"Vector with any value is not empty", testVectorWithValue},
+      {"Inbound access elements", testElementAccess},
+      {"Sizes must be equal as elements", testCopyConstructor},
+      {"The data is valid when swapping places", testSwap},
+      {"The element should be added to the beginning", testPushFront},
+      {"Correctly adding two elements to the beginning", testDoublePushFront},
+      {"Capacity of the empty vector is 0", testCapacityOfEmpty},
+      {"Capacity of a non-empty vector is correct", testCapacityWithValue},
+      {"Size of the empty vector is 0", testSizeOFEmpty},
+      {"Size of a non-empty vector is correct", testSizeWithValue},
+      {"Deleting from an empty vector generates a certain exception", testPopWithEmptyVector},
+      {"Deleting a vector with one value makes it empty.", testPopWithOneValue},
+      {"Deleting from a vector reduces its size and keeps the data correct", testPopWithMoreValues},
+      {"The correct expansion of the array capacity by 2 times is expected", testCapacityWithMoreValues},
+      {"If an element exists, it returns the correct answer in a const vector", testElementInboundCheckedConstAccess},
+      {"at(0) will throw an exception for an empty const vector", testElementOutOfBoundCheckedConstAccess},
+      {"If an element exists, it returns the correct answer", testElementInboundCheckedAccess},
+      {"at(0) will throw an exception for an empty vector", testElementOutOfBoundCheckedAccess},
+      {"Inbound access elements in const vector", testElementConstAccess}};
   const size_t count = sizeof(tests) / sizeof(pair_t);
   std::cout << std::boolalpha;
   bool pass = true;
