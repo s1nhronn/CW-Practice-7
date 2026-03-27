@@ -238,6 +238,32 @@ bool testPopFrontWithMoreValues()
   return v[0] == 2 && v[1] == 3;
 }
 
+bool insertValueInEmptyVector()
+{
+  topit::Vector< int > v;
+  v.insert(0, 1);
+  return !v.isEmpty() && v[0] == 1;
+}
+
+bool insertValueInVectorWithOneValue()
+{
+  topit::Vector< int > v;
+  v.pushBack(2);
+  v.insert(0, 1);
+  v.insert(1, 3);
+  return v[0] == 1 && v[1] == 2 && v[2] == 3;
+}
+
+bool insertValueInVectorWithManyValues()
+{
+  topit::Vector< int > v;
+  v.pushBack(1);
+  v.pushBack(2);
+  v.pushBack(3);
+  v.insert(1, 4);
+  return v[0] == 1 && v[1] == 4 && v[2] == 2 && v[3] == 3;
+}
+
 int main()
 {
   using test_t = bool (*)();
@@ -265,7 +291,9 @@ int main()
       {"at(0) will throw an exception for an empty const vector", testElementOutOfBoundCheckedConstAccess},
       {"If an element exists, it returns the correct answer", testElementInboundCheckedAccess},
       {"at(0) will throw an exception for an empty vector", testElementOutOfBoundCheckedAccess},
-      {"Inbound access elements in const vector", testElementConstAccess}};
+      {"Inbound access elements in const vector", testElementConstAccess},
+      {"Inserting into an empty vector", insertValueInEmptyVector},
+      {"Inserting at the beginning and end of a vector with a single value", insertValueInVectorWithOneValue}};
   const size_t count = sizeof(tests) / sizeof(pair_t);
   std::cout << std::boolalpha;
   bool pass = true;
