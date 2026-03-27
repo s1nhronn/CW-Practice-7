@@ -59,8 +59,32 @@ namespace topit
 }
 
 template < class T >
-void topit::Vector< T >::erase(size_t, size_t)
-{}
+void topit::Vector< T >::erase(size_t beg, size_t end) // !FIXME
+{
+  if (!size_)
+  {
+    throw std::out_of_range("Erasing from empty vector");
+  }
+  if (end > size_)
+  {
+    throw std::range_error("End more than size");
+  }
+  if (beg > end)
+  {
+    throw std::range_error("Begin more than end");
+  }
+  size_t rem = end - beg;
+  Vector< T > cpy(size_ - rem);
+  for (size_t i = 0; i < beg; ++i)
+  {
+    cpy[i] = (*this)[i];
+  }
+  for (size_t i = beg; i < cpy.getSize(); ++i)
+  {
+    cpy[i] = (*this)[i + rem];
+  }
+  swap(cpy);
+}
 
 template < class T >
 void topit::Vector< T >::insert(size_t i, const Vector< T >& rhs, size_t beg, size_t end)
