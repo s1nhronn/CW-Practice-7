@@ -2,6 +2,7 @@
 #define TOP_IT_VECTOR_HPP
 #include <cassert>
 #include <cstddef>
+#include <memory>
 #include <stdexcept>
 #include <utility>
 
@@ -100,6 +101,12 @@ namespace topit
 
     explicit Vector(size_t k);
   };
+}
+
+template < class T >
+bool topit::VIter< T >::operator==(const VIter< T >&) const noexcept
+{
+  return false;
 }
 
 template < class T >
