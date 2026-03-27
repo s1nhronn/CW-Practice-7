@@ -284,6 +284,59 @@ bool testInsertValueOutOfRange()
   }
 }
 
+bool testEraseValueFromEmptyVector()
+{
+  topit::Vector< int > v;
+  try
+  {
+    v.erase(0);
+    return false;
+  }
+  catch (const std::out_of_range&)
+  {
+    return true;
+  }
+}
+
+bool testEraseValueFromVectorWithOneValue()
+{
+  topit::Vector< int > v;
+  v.pushBack(1);
+  v.erase(0);
+  return v.isEmpty();
+}
+
+bool testEraseValueFromVectorWithManyValues()
+{
+  topit::Vector< int > v;
+  v.pushBack(1);
+  v.pushBack(2);
+  v.pushBack(3);
+  v.pushBack(4);
+  v.erase(2);
+  bool res = v[0] == 1;
+  res = res && v[1] == 2;
+  res = res && v[2] == 4;
+  return res && v.getSize() == 3;
+}
+
+bool testEraseValueOutOfRange()
+{
+  topit::Vector< int > v;
+  v.pushBack(1);
+  v.pushBack(2);
+  v.pushBack(3);
+  try
+  {
+    v.erase(5);
+    return false;
+  }
+  catch (const std::out_of_range&)
+  {
+    return true;
+  }
+}
+
 int main()
 {
   using test_t = bool (*)();
@@ -315,7 +368,11 @@ int main()
       {"Inserting into an empty vector", testInsertValueInEmptyVector},
       {"Inserting at the beginning and end of a vector with a single value", testInsertValueInVectorWithOneValue},
       {"Insertion into the vector", testInsertValueInVectorWithManyValues},
-      {"Inserting an element outside the border throws an exception", testInsertValueOutOfRange}};
+      {"Inserting an element outside the border throws an exception", testInsertValueOutOfRange},
+      {"Erase from empty vector throws an exception", testEraseValueFromEmptyVector},
+      {"Erase from vector with one value make it empty", testEraseValueFromVectorWithOneValue},
+      {"Erase from empty vector with values its size decreases", testEraseValueFromVectorWithManyValues},
+      {"Erase from out of range throw an exception", testEraseValueOutOfRange}};
   const size_t count = sizeof(tests) / sizeof(pair_t);
   std::cout << std::boolalpha;
   bool pass = true;
