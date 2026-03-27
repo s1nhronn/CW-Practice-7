@@ -22,8 +22,8 @@ namespace topit
     bool operator!=(const VIter< T >&) const noexcept;
     VIter< T >& operator++();
     VIter< T >& operator--();
-    VIter< T >& operator+(size_t i);
-    VIter< T >& operator-(size_t i);
+    VIter< T > operator+(size_t i);
+    VIter< T > operator-(size_t i);
     T& operator*();
 
   private:
@@ -39,6 +39,8 @@ namespace topit
     bool operator!=(const VCIter< T >&);
     VCIter< T >& operator++();
     VCIter< T >& operator--();
+    VCIter< T > operator+(size_t i);
+    VCIter< T > operator-(size_t i);
     const T& operator*();
 
   private:
@@ -133,7 +135,7 @@ topit::VCIter< T > topit::Vector< T >::end() const
 template < class T >
 topit::VIter< T > topit::Vector< T >::end()
 {
-  return VCIter< T >(*this, size_);
+  return VIter< T >(*this, size_);
 }
 
 template < class T >
