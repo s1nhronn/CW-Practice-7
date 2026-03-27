@@ -2,7 +2,6 @@
 #define TOP_IT_VECTOR_HPP
 #include <cassert>
 #include <cstddef>
-#include <memory>
 #include <stdexcept>
 #include <utility>
 
