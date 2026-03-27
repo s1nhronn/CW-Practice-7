@@ -681,6 +681,12 @@ bool testEraseRangeWhenBeginMoreThanEnd()
   }
 }
 
+bool testDereferenceBeginInEmptyVector()
+{
+  topit::Vector< int > v;
+  return v.begin() == v.end();
+}
+
 int main()
 {
   using test_t = bool (*)();
@@ -728,7 +734,8 @@ int main()
       {"Erase range from vector with one value make it empty", testEraseRangeFromVectorWithOneValue},
       {"Erase range from vector with many values is correct", testEraseRangeFromVectorWithManyValues},
       {"Erase range when end more than size throw an exception", testEraseRangeWhenEndMoreThanSize},
-      {"Erase range when begin more than end throw an exception", testEraseRangeWhenBeginMoreThanEnd}};
+      {"Erase range when begin more than end throw an exception", testEraseRangeWhenBeginMoreThanEnd},
+      {"Dereference of begin equal end in empty vector", testDereferenceBeginInEmptyVector}};
   const size_t count = sizeof(tests) / sizeof(pair_t);
   std::cout << std::boolalpha;
   bool pass = true;
