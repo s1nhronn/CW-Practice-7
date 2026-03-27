@@ -72,7 +72,16 @@ void topit::Vector< T >::popBack()
 template < class T >
 void topit::Vector< T >::popFront()
 {
-  return;
+  if (size_ == 0)
+  {
+    throw std::out_of_range("Vector is empty");
+  }
+  Vector< T > cpy(size_ - 1);
+  for (size_t i = 1; i < size_; ++i)
+  {
+    cpy[i - 1] = (*this)[i];
+  }
+  swap(cpy);
 }
 
 template < class T >
