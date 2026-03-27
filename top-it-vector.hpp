@@ -12,6 +12,25 @@
 namespace topit
 {
   template < class T >
+  struct Vector;
+
+  template < class T >
+  struct VIter
+  {
+    explicit VIter(Vector< T >& v);
+    bool operator==(const VIter< T >&) const noexcept;
+    bool operator!=(const VIter< T >&) const noexcept;
+    VIter< T >& operator++();
+    VIter< T >& operator--();
+    VIter< T >& operator+(size_t i);
+    VIter< T >& operator-(size_t i);
+    T& operator*();
+
+  private:
+    Vector< T >& v_;
+  };
+
+  template < class T >
   struct Vector
   {
     Vector();
