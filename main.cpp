@@ -665,6 +665,7 @@ bool testEraseRangeWhenEndMoreThanSize()
 bool testEraseRangeWhenBeginMoreThanEnd()
 {
   topit::Vector< int > v;
+  v.pushBack(1);
   try
   {
     v.erase(1, 0);
