@@ -31,7 +31,20 @@ namespace topit
     size_t pos_;
   };
 
-  // нужно сделать также VCIter
+  template < class T >
+  struct VCIter
+  {
+    explicit VCIter(const Vector< T >& v, size_t pos);
+    bool operator==(const VCIter< T >&);
+    bool operator!=(const VCIter< T >&);
+    VCIter< T >& operator++();
+    VCIter< T >& operator--();
+    const T& operator*();
+
+  private:
+    const Vector< T >& v_;
+    size_t pos_;
+  };
 
   template < class T >
   struct Vector
@@ -45,7 +58,12 @@ namespace topit
     Vector< T >& operator=(Vector< T >&&) noexcept;
 
     VIter< T > begin();
+    VCIter< T > begin() const;
+    VCIter< T > cbegin() const;
+
     VIter< T > end();
+    VCIter< T > end() const;
+    VCIter< T > cend() const;
 
     void swap(Vector< T >& rhs) noexcept;
 
@@ -83,15 +101,15 @@ namespace topit
 }
 
 template < class T >
-topit::VIter< T > topit::Vector< T >::begin()
+topit::VCIter< T > topit::Vector< T >::cbegin() const
 {
-  return VIter< T >(*this, 0);
+  return VCIter< T >(*this, 0);
 }
 
 template < class T >
-topit::VIter< T > topit::Vector< T >::end()
+topit::VCIter< T > topit::Vector< T >::cend() const
 {
-  return VIter< T >(*this, size_);
+  return VCIter< T >(*this, size_);
 }
 
 template < class T >
