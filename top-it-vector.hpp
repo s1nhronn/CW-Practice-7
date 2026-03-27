@@ -41,6 +41,9 @@ namespace topit
     Vector< T >& operator=(const Vector< T >&);
     Vector< T >& operator=(Vector< T >&&) noexcept;
 
+    VIter< T > begin();
+    VIter< T > end();
+
     void swap(Vector< T >& rhs) noexcept;
 
     bool isEmpty() const noexcept;
