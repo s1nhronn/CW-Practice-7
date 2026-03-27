@@ -59,7 +59,7 @@ namespace topit
 }
 
 template < class T >
-void topit::Vector< T >::erase(size_t beg, size_t end) // !FIXME
+void topit::Vector< T >::erase(size_t beg, size_t end)
 {
   if (!size_)
   {
