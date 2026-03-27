@@ -180,20 +180,31 @@ bool testPopBackWithEmptyVector()
   try
   {
     v.popBack();
+    return false;
   }
   catch (const std::out_of_range&)
   {
     return true;
   }
-  return false;
+  catch (...)
+  {
+    return false;
+  }
 }
 
 bool testPopBackWithOneValue()
 {
   topit::Vector< int > v;
   v.pushBack(1);
-  v.popBack();
-  return v.isEmpty();
+  try
+  {
+    v.popBack();
+    return v.isEmpty();
+  }
+  catch (...)
+  {
+    return false;
+  }
 }
 
 bool testPopBackWithMoreValues()
@@ -202,8 +213,15 @@ bool testPopBackWithMoreValues()
   v.pushBack(1);
   v.pushBack(2);
   v.pushBack(3);
-  v.popBack();
-  return v.getSize() == 2 && v[0] == 1 && v[1] == 2;
+  try
+  {
+    v.popBack();
+    return v.getSize() == 2 && v[0] == 1 && v[1] == 2;
+  }
+  catch (...)
+  {
+    return false;
+  }
 }
 
 bool testPopFrontWithEmptyVector()
@@ -218,14 +236,25 @@ bool testPopFrontWithEmptyVector()
   {
     return true;
   }
+  catch (...)
+  {
+    return false;
+  }
 }
 
 bool testPopFrontWithOneValue()
 {
   topit::Vector< int > v;
   v.pushBack(1);
-  v.popFront();
-  return v.isEmpty();
+  try
+  {
+    v.popFront();
+    return v.isEmpty();
+  }
+  catch (...)
+  {
+    return false;
+  }
 }
 
 bool testPopFrontWithMoreValues()
@@ -234,27 +263,48 @@ bool testPopFrontWithMoreValues()
   v.pushBack(1);
   v.pushBack(2);
   v.pushBack(3);
-  v.popFront();
-  return v[0] == 2 && v[1] == 3;
+  try
+  {
+    v.popFront();
+    return v[0] == 2 && v[1] == 3;
+  }
+  catch (...)
+  {
+    return false;
+  }
 }
 
 bool testInsertValueInEmptyVector()
 {
   topit::Vector< int > v;
-  v.insert(0, 1);
-  return !v.isEmpty() && v[0] == 1;
+  try
+  {
+    v.insert(0, 1);
+    return !v.isEmpty() && v[0] == 1;
+  }
+  catch (...)
+  {
+    return false;
+  }
 }
 
 bool testInsertValueInVectorWithOneValue()
 {
   topit::Vector< int > v1;
   v1.pushBack(2);
-  v1.insert(0, 1);
-  bool res = v1[0] == 1;
   topit::Vector< int > v2;
   v2.pushBack(2);
-  v2.insert(1, 3);
-  return res && v2[1] == 3;
+  try
+  {
+    v1.insert(0, 1);
+    bool res = v1[0] == 1;
+    v2.insert(1, 3);
+    return res && v2[1] == 3;
+  }
+  catch (...)
+  {
+    return false;
+  }
 }
 
 bool testInsertValueInVectorWithManyValues()
@@ -263,8 +313,15 @@ bool testInsertValueInVectorWithManyValues()
   v.pushBack(1);
   v.pushBack(2);
   v.pushBack(3);
-  v.insert(1, 4);
-  return v[0] == 1 && v[1] == 4 && v[2] == 2 && v[3] == 3;
+  try
+  {
+    v.insert(1, 4);
+    return v[0] == 1 && v[1] == 4 && v[2] == 2 && v[3] == 3;
+  }
+  catch (...)
+  {
+    return false;
+  }
 }
 
 bool testInsertValueOutOfRange()
@@ -282,6 +339,10 @@ bool testInsertValueOutOfRange()
   {
     return true;
   }
+  catch (...)
+  {
+    return false;
+  }
 }
 
 bool testEraseValueFromEmptyVector()
@@ -296,14 +357,25 @@ bool testEraseValueFromEmptyVector()
   {
     return true;
   }
+  catch (...)
+  {
+    return false;
+  }
 }
 
 bool testEraseValueFromVectorWithOneValue()
 {
   topit::Vector< int > v;
   v.pushBack(1);
-  v.erase(0);
-  return v.isEmpty();
+  try
+  {
+    v.erase(0);
+    return v.isEmpty();
+  }
+  catch (...)
+  {
+    return false;
+  }
 }
 
 bool testEraseValueFromVectorWithManyValues()
@@ -313,11 +385,18 @@ bool testEraseValueFromVectorWithManyValues()
   v.pushBack(2);
   v.pushBack(3);
   v.pushBack(4);
-  v.erase(2);
-  bool res = v[0] == 1;
-  res = res && v[1] == 2;
-  res = res && v[2] == 4;
-  return res && v.getSize() == 3;
+  try
+  {
+    v.erase(2);
+    bool res = v[0] == 1;
+    res = res && v[1] == 2;
+    res = res && v[2] == 4;
+    return res && v.getSize() == 3;
+  }
+  catch (...)
+  {
+    return false;
+  }
 }
 
 bool testEraseValueOutOfRange()
@@ -334,6 +413,10 @@ bool testEraseValueOutOfRange()
   catch (const std::out_of_range&)
   {
     return true;
+  }
+  catch (...)
+  {
+    return false;
   }
 }
 
