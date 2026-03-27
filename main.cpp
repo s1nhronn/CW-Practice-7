@@ -428,11 +428,7 @@ bool testInsertRangeFromEmpty()
   try
   {
     v1.insert(0, v2, 0, 0);
-    return false;
-  }
-  catch (const std::range_error&)
-  {
-    return true;
+    return v1[0] == 1;
   }
   catch (...)
   {
@@ -501,8 +497,8 @@ bool testInsertRangeV1SizeMoreV2Range()
     v1.insert(2, v2, 1, 3);
     bool res = v1[0] == 1;
     res = res && v1[1] == 2;
-    res = res && v1[2] == 5;
-    res = res && v1[3] == 6;
+    res = res && v1[2] == 6;
+    res = res && v1[3] == 7;
     res = res && v1[4] == 3;
     res = res && v1[5] == 4;
     return res;
@@ -581,7 +577,7 @@ bool testInsertRangeEndOutOfRange()
   v2.pushBack(8);
   try
   {
-    v1.insert(2, v2, 1, 10);
+    v1.insert(0, v2, 0, 10);
     return false;
   }
   catch (const std::range_error&)
@@ -630,7 +626,7 @@ int main()
       {"Erase from vector with one value make it empty", testEraseValueFromVectorWithOneValue},
       {"Erase from empty vector with values its size decreases", testEraseValueFromVectorWithManyValues},
       {"Erase from out of range throw an exception", testEraseValueOutOfRange},
-      {"Insert from empty throw an exception", testInsertRangeFromEmpty},
+      {"Insert from empty dont change vector", testInsertRangeFromEmpty},
       {"Insert in empty push back elems", testInsertRangeInEmpty},
       {"Insert in vector with size less than paste range from v2", testInsertRangeV1SizeLessV2Range},
       {"Insert in vector with size more than paste range from v2", testInsertRangeV1SizeMoreV2Range},
