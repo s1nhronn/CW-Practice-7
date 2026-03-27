@@ -59,9 +59,23 @@ namespace topit
 }
 
 template < class T >
-void topit::Vector< T >::insert(size_t, const T&)
+void topit::Vector< T >::insert(size_t i, const T& val)
 {
-  return;
+  if (i > size_)
+  {
+    throw std::out_of_range("Index is more than size");
+  }
+  Vector< T > cpy(size_ + 1);
+  for (size_t j = 0; j < i; ++j)
+  {
+    cpy[j] = (*this)[j];
+  }
+  cpy[i] = val;
+  for (size_t j = i + 1; j < cpy.getSize(); ++j)
+  {
+    cpy[j] = (*this)[j - 1];
+  }
+  swap(cpy);
 }
 
 template < class T >
