@@ -59,9 +59,22 @@ namespace topit
 }
 
 template < class T >
-void topit::Vector< T >::erase(size_t)
+void topit::Vector< T >::erase(size_t i)
 {
-  return;
+  if (i >= size_)
+  {
+    throw std::out_of_range("Index is more than size");
+  }
+  Vector< T > cpy(size_ - 1);
+  for (size_t j = 0; j < i; ++j)
+  {
+    cpy[j] = (*this)[j];
+  }
+  for (size_t j = i + 1; j < size_; ++j)
+  {
+    cpy[j - 1] = (*this)[j];
+  }
+  swap(cpy);
 }
 
 template < class T >
