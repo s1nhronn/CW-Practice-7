@@ -687,6 +687,12 @@ bool testBeginEqualEndInEmptyVector()
   return v.begin() == v.end();
 }
 
+bool testBeginEqualEndInConstEmptyVector()
+{
+  const topit::Vector< int > v;
+  return v.begin() == v.end();
+}
+
 int main()
 {
   using test_t = bool (*)();
