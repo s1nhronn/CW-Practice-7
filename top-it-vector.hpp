@@ -104,6 +104,16 @@ namespace topit
 }
 
 template < class T >
+T& topit::VIter< T >::operator*()
+{
+  if (pos_ < v_.getSize())
+  {
+    throw std::out_of_range("Pos of iter more than size of vector");
+  }
+  return v_[pos_];
+}
+
+template < class T >
 bool topit::VCIter< T >::operator==(const VCIter< T >& rhs) const noexcept
 {
   return (std::addressof(this->v_) == std::addressof(rhs.v_)) && (this->pos_ == rhs.pos_);
