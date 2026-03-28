@@ -690,21 +690,21 @@ bool testBeginEqualEndInEmptyVector()
 bool testBeginEqualEndInConstEmptyVector()
 {
   const topit::Vector< int > v;
-  try
-  {
-    return v.begin() == v.end();
-  }
-  catch (...)
-  {
-    return false;
-  }
+  return v.begin() == v.end();
 }
 
 bool testDereferenceOfBeginReturnFirstElem()
 {
   topit::Vector< int > v;
   v.pushBack(1);
-  return *v.begin() == 1;
+  try
+  {
+    return *v.begin() == 1;
+  }
+  catch (...)
+  {
+    return false;
+  }
 }
 
 int main()
@@ -755,8 +755,9 @@ int main()
       {"Erase range from vector with many values is correct", testEraseRangeFromVectorWithManyValues},
       {"Erase range when end more than size throw an exception", testEraseRangeWhenEndMoreThanSize},
       {"Erase range when begin more than end throw an exception", testEraseRangeWhenBeginMoreThanEnd},
-      {"Dereference of begin equal end in empty vector", testBeginEqualEndInEmptyVector},
-      {"Dereference of begin equal end in const empty vector", testBeginEqualEndInConstEmptyVector}};
+      {"Begin equal end in empty vector", testBeginEqualEndInEmptyVector},
+      {"Begin equal end in const empty vector", testBeginEqualEndInConstEmptyVector},
+      {"Dereference of begin return first elem", testDereferenceOfBeginReturnFirstElem}};
   const size_t count = sizeof(tests) / sizeof(pair_t);
   std::cout << std::boolalpha;
   bool pass = true;
