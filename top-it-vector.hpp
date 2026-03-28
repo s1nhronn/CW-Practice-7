@@ -21,10 +21,10 @@ namespace topit
     explicit VIter(Vector< T >& v, size_t pos);
     bool operator==(const VIter< T >&) const noexcept;
     bool operator!=(const VIter< T >&) const noexcept;
-    VIter< T >& operator++();
-    VIter< T >& operator--();
-    VIter< T > operator+(size_t i);
-    VIter< T > operator-(size_t i);
+    VIter< T >& operator++() noexcept;
+    VIter< T >& operator--() noexcept;
+    VIter< T > operator+(size_t i) noexcept;
+    VIter< T > operator-(size_t i) noexcept;
     T& operator*();
 
   private:
@@ -36,12 +36,12 @@ namespace topit
   struct VCIter
   {
     explicit VCIter(const Vector< T >& v, size_t pos);
-    bool operator==(const VCIter< T >&);
-    bool operator!=(const VCIter< T >&);
-    VCIter< T >& operator++();
-    VCIter< T >& operator--();
-    VCIter< T > operator+(size_t i);
-    VCIter< T > operator-(size_t i);
+    bool operator==(const VCIter< T >&) const noexcept;
+    bool operator!=(const VCIter< T >&) const noexcept;
+    VCIter< T >& operator++() noexcept;
+    VCIter< T >& operator--() noexcept;
+    VCIter< T > operator+(size_t i) noexcept;
+    VCIter< T > operator-(size_t i) noexcept;
     const T& operator*();
 
   private:
@@ -104,6 +104,12 @@ namespace topit
 }
 
 template < class T >
+bool topit::VCIter< T >::operator==(const VCIter< T >&) const noexcept
+{
+  return false;
+}
+
+template < class T >
 bool topit::VIter< T >::operator==(const VIter< T >& rhs) const noexcept
 {
   return (std::addressof(this->v_) == std::addressof(rhs.v_)) && (this->pos_ == rhs.pos_);
@@ -150,6 +156,12 @@ topit::VIter< T > topit::Vector< T >::end()
 {
   return VIter< T >(*this, size_);
 }
+
+template < class T >
+topit::VCIter< T >::VCIter(const Vector< T >& v, size_t pos):
+  v_(v),
+  pos_(pos)
+{}
 
 template < class T >
 topit::VIter< T >::VIter(Vector< T >& v, size_t pos):
