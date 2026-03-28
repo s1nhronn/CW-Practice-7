@@ -690,7 +690,14 @@ bool testBeginEqualEndInEmptyVector()
 bool testBeginEqualEndInConstEmptyVector()
 {
   const topit::Vector< int > v;
-  return v.begin() == v.end();
+  try
+  {
+    return v.begin() == v.end();
+  }
+  catch (...)
+  {
+    return false;
+  }
 }
 
 bool testDereferenceOfBeginReturnFirstElem()
