@@ -707,6 +707,21 @@ bool testDereferenceOfBeginReturnFirstElem()
   }
 }
 
+bool testDereferenceOfBeginReturnFirstElemInConstVector()
+{
+  topit::Vector< int > v;
+  v.pushBack(1);
+  const topit::Vector< int > cv = v;
+  try
+  {
+    return *cv.begin() == 1;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
 int main()
 {
   using test_t = bool (*)();
