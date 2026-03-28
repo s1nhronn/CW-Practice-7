@@ -106,7 +106,7 @@ namespace topit
 template < class T >
 T& topit::VIter< T >::operator*()
 {
-  if (pos_ < v_.getSize())
+  if (pos_ >= v_.getSize())
   {
     throw std::out_of_range("Pos of iter more than size of vector");
   }
