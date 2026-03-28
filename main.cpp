@@ -693,6 +693,13 @@ bool testBeginEqualEndInConstEmptyVector()
   return v.begin() == v.end();
 }
 
+bool testDereferenceOfBeginReturnFirstElem()
+{
+  topit::Vector< int > v;
+  v.pushBack(1);
+  return *v.begin() == 1;
+}
+
 int main()
 {
   using test_t = bool (*)();
