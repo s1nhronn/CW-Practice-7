@@ -103,6 +103,72 @@ namespace topit
 }
 
 template < class T >
+topit::VCIter< T > topit::VCIter< T >::operator-(size_t i) noexcept
+{
+  VCIter< T > iter(v_, pos_ - i);
+  return iter;
+}
+
+template < class T >
+topit::VCIter< T > topit::VCIter< T >::operator+(size_t i) noexcept
+{
+  VCIter< T > iter(v_, pos_ + i);
+  return iter;
+}
+
+template < class T >
+topit::VIter< T > topit::VIter< T >::operator-(size_t i) noexcept
+{
+  VIter< T > iter(v_, pos_ - i);
+  return iter;
+}
+
+template < class T >
+topit::VIter< T > topit::VIter< T >::operator+(size_t i) noexcept
+{
+  VIter< T > iter(v_, pos_ + i);
+  return iter;
+}
+
+template < class T >
+topit::VCIter< T >& topit::VCIter< T >::operator--() noexcept
+{
+  --pos_;
+  return *this;
+}
+
+template < class T >
+topit::VIter< T >& topit::VIter< T >::operator--() noexcept
+{
+  --pos_;
+  return *this;
+}
+
+template < class T >
+topit::VCIter< T >& topit::VCIter< T >::operator++() noexcept
+{
+  ++pos_;
+  return *this;
+}
+
+template < class T >
+topit::VIter< T >& topit::VIter< T >::operator++() noexcept
+{
+  ++pos_;
+  return *this;
+}
+
+template < class T >
+const T& topit::VCIter< T >::operator*()
+{
+  if (pos_ >= v_.getSize())
+  {
+    throw std::out_of_range("Pos of iter more than size of vector");
+  }
+  return v_[pos_];
+}
+
+template < class T >
 T& topit::VIter< T >::operator*()
 {
   if (pos_ >= v_.getSize())
