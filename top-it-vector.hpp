@@ -108,6 +108,20 @@ namespace topit
 }
 
 template < class T >
+template < class FwdIterator >
+void topit::Vector< T >::insert(VIter< T >, FwdIterator, FwdIterator)
+{
+  try
+  {
+    at(0) = 1;
+  }
+  catch (...)
+  {
+    throw std::range_error("brrrr");
+  }
+}
+
+template < class T >
 topit::VCIter< T > topit::VCIter< T >::operator-(size_t i) noexcept
 {
   VCIter< T > iter(v_, pos_ - i);
