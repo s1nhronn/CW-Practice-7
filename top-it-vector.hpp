@@ -30,6 +30,7 @@ namespace topit
   private:
     Vector< T >& v_;
     size_t pos_;
+    friend class Vector< T >;
   };
 
   template < class T >
@@ -47,6 +48,7 @@ namespace topit
   private:
     const Vector< T >& v_;
     size_t pos_;
+    friend class Vector< T >;
   };
 
   template < class T >
