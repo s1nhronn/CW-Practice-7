@@ -681,6 +681,122 @@ bool testEraseRangeWhenBeginMoreThanEnd()
   }
 }
 
+bool testInsertFwdItersEmptyVector()
+{
+  topit::Vector< int > v1, v2;
+  v2.pushBack(1);
+  v2.pushBack(2);
+  v2.pushBack(3);
+  try
+  {
+    v1.insert(v1.begin(), v2.begin(), v2.end());
+    return !v1.isEmpty() && v1[0] == 1 && v1[1] == 2 && v1[2] == 3;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
+bool testInsertFwdItersBegEqEnd()
+{
+  topit::Vector< int > v1, v2;
+  try
+  {
+    v1.insert(v1.begin(), v2.begin(), v2.end());
+    return v1.isEmpty();
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
+bool testInsertFwdItersPosIncorrect()
+{
+  topit::Vector< int > v1, v2;
+  v2.pushBack(1);
+  v2.pushBack(2);
+  v2.pushBack(3);
+  try
+  {
+    v1.insert(v1.begin() + 1, v2.begin(), v2.end());
+    return false;
+  }
+  catch (const std::out_of_range&)
+  {
+    return true;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
+bool testInsertFwdItersBegIncorrect()
+{
+  topit::Vector< int > v1, v2;
+  try
+  {
+    v1.insert(v1.begin(), v2.begin() + 5, v2.end());
+    return false;
+  }
+  catch (const std::out_of_range&)
+  {
+    return true;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
+bool testInsertFwdItersEndIncorrect()
+{
+  topit::Vector< int > v1, v2;
+  v2.pushBack(1);
+  try
+  {
+    v1.insert(v1.begin(), v2.begin(), v2.end() + 5);
+    return false;
+  }
+  catch (const std::out_of_range&)
+  {
+    return true;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
+bool testInsertFwdItersNormal()
+{
+  topit::Vector< int > v1, v2;
+  v1.pushBack(1);
+  v1.pushBack(2);
+  v1.pushBack(3);
+  v2.pushBack(4);
+  v2.pushBack(5);
+  v2.pushBack(6);
+  v2.pushBack(7);
+  try
+  {
+    v1.insert(++v1.begin(), v2.begin() + 1, v2.begin() + 3);
+    bool res = v1.getSize() == 5;
+    res = v1[0] == 1;
+    res = res && v1[1] == 5;
+    res = res && v1[2] == 6;
+    res = res && v1[3] == 2;
+    res = res && v1[4] == 3;
+    return res;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
 int main()
 {
   using test_t = bool (*)();
@@ -728,7 +844,13 @@ int main()
       {"Erase range from vector with one value make it empty", testEraseRangeFromVectorWithOneValue},
       {"Erase range from vector with many values is correct", testEraseRangeFromVectorWithManyValues},
       {"Erase range when end more than size throw an exception", testEraseRangeWhenEndMoreThanSize},
-      {"Erase range when begin more than end throw an exception", testEraseRangeWhenBeginMoreThanEnd}};
+      {"Erase range when begin more than end throw an exception", testEraseRangeWhenBeginMoreThanEnd},
+      {"Insert in empty vector add elems in it", testInsertFwdItersEmptyVector},
+      {"Insert when beg == end not change vector", testInsertFwdItersBegEqEnd},
+      {"Insert when pos is incorrect throw an exception", testInsertFwdItersPosIncorrect},
+      {"Insert when beg is incorrect throw an exception", testInsertFwdItersBegIncorrect},
+      {"Insert when end is incorrect throw an exception", testInsertFwdItersEndIncorrect},
+      {"Correct insertion with iterators", testInsertFwdItersNormal}};
   const size_t count = sizeof(tests) / sizeof(pair_t);
   std::cout << std::boolalpha;
   bool pass = true;
