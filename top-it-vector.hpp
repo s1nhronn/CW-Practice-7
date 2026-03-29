@@ -8,7 +8,7 @@
 
 // Домашнее задание
 // 1. Реализовать итераторы для вектора
-// 2. Придумать еще 3 insert (один уже есть) и 3 erase, но с итераторами
+// 2. Придумать еще 3 insert и 3 erase, но с итераторами
 
 namespace topit
 {
@@ -92,7 +92,12 @@ namespace topit
     void erase(size_t beg, size_t end);
 
     template < class FwdIterator >
-    void insert(VIter< T > pos, FwdIterator beg, FwdIterator end); // один из методов
+    void insert(VIter< T > pos, FwdIterator beg, FwdIterator end);
+    void insert(VIter< T > pos, const T& value);
+    void insert(VIter< T > pos, const T& value, size_t count);
+    void erase(VIter< T > beg, VIter< T > end);
+    void erase(VIter< T > pos);
+    void erase(VIter< T > pos, size_t count);
 
   private:
     T* data_;
