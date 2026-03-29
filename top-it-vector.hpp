@@ -91,9 +91,8 @@ namespace topit
     void insert(size_t i, const Vector< T >& rhs, size_t beg, size_t end);
     void erase(size_t beg, size_t end);
 
-    // Вместо VecIterator свой итератор
-    template < class VecIterator, class FwdIterator >
-    void insert(VecIterator pos, FwdIterator beg, FwdIterator end); // один из методов
+    template < class FwdIterator >
+    void insert(VIter< T > pos, FwdIterator beg, FwdIterator end); // один из методов
 
   private:
     T* data_;
