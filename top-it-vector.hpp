@@ -106,7 +106,7 @@ namespace topit
     template < class FwdIterator >
     void insert(VIter< T > pos, FwdIterator beg, FwdIterator end);
     void insert(VIter< T > pos, const T& value);
-    void insert(VIter< T > pos, const T& value, size_t count);
+    void insert(const T& value, size_t count, VIter< T > pos);
     void erase(VIter< T > beg, VIter< T > end);
     void erase(VIter< T > pos);
     void erase(VIter< T > pos, size_t count);
