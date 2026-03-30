@@ -127,6 +127,12 @@ namespace topit
 }
 
 template < class T >
+void topit::Vector< T >::insert(VIter< T >, const T&)
+{
+  return;
+}
+
+template < class T >
 void topit::clear(T* data, size_t to_pos)
 {
   for (size_t j = 0; j < to_pos; ++j)
