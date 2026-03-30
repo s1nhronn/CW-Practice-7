@@ -127,8 +127,32 @@ namespace topit
 }
 
 template < class T >
-void topit::Vector< T >::insert(const T&, size_t, VIter< T >)
-{}
+void topit::Vector< T >::insert(const T& value, size_t count, VIter< T > pos)
+{
+  Vector< T > cpy(size_ + count);
+  try
+  {
+    for (; cpy.size_ < pos.pos_; ++cpy.size_)
+    {
+      new (cpy.data_ + cpy.size_) T((*this).at(cpy.size_));
+    }
+    for (size_t i = 0; i < count; ++i)
+    {
+      new (cpy.data_ + cpy.size_++) T(value);
+    }
+    for (; pos != (*this).end(); ++pos)
+    {
+      new (cpy.data_ + cpy.size_++) T(*pos);
+    }
+  }
+  catch (...)
+  {
+    clear(cpy.data_, cpy.size_);
+    ::operator delete(cpy.data_);
+    throw;
+  }
+  swap(cpy);
+}
 
 template < class T >
 void topit::Vector< T >::insert(VIter< T > pos, const T& val)
