@@ -121,6 +121,18 @@ namespace topit
     void pushBackImpl(const T&);
     void reserve(size_t pos, size_t k);
   };
+
+  template < class T >
+  void clear(T* data, size_t to_pos);
+}
+
+template < class T >
+void topit::clear(T* data, size_t to_pos)
+{
+  for (size_t j = 0; j < to_pos; ++j)
+  {
+    (data + j)->~T();
+  }
 }
 
 template < class T >
@@ -141,14 +153,12 @@ void topit::Vector< T >::reserve(size_t cap)
   }
   catch (...)
   {
-    for (size_t j = 0; j < i; ++j)
-    {
-      (d + i)->~T();
-    }
+    clear(d, i);
     ::operator delete(d);
     throw;
   }
-  delete[] data_;
+  clear(data_, size_);
+  ::operator delete(data_);
   data_ = d;
   capacity_ = cap;
 }
@@ -157,10 +167,17 @@ template < class T >
 topit::Vector< T >::Vector(std::initializer_list< T > il):
   Vector(il.size())
 {
-  size_t i = 0;
-  for (auto&& v : il)
+  try
   {
-    data_[i++] = std::move(v);
+    for (auto&& v : il)
+    {
+      new (data_ + size_++) T(std::move(v));
+    }
+  }
+  catch (...)
+  {
+    clear(data_, size_);
+    throw;
   }
 }
 
@@ -343,13 +360,22 @@ void topit::Vector< T >::erase(size_t beg, size_t end)
   }
   size_t rem = end - beg;
   Vector< T > cpy(size_ - rem);
-  for (size_t i = 0; i < beg; ++i)
+  try
   {
-    cpy[i] = (*this)[i];
+    for (; cpy.size_ < beg; ++cpy.size_)
+    {
+      new (cpy.data_ + cpy.size_) T((*this)[cpy.size_]);
+    }
+    for (; cpy.size_ < size_ - rem; ++cpy.size_)
+    {
+      new (cpy.data_ + cpy.size_) T((*this)[cpy.size_ + rem]);
+    }
   }
-  for (size_t i = beg; i < cpy.getSize(); ++i)
+  catch (...)
   {
-    cpy[i] = (*this)[i + rem];
+    clear(cpy.data_, cpy.size_);
+    ::operator delete(cpy.data_);
+    throw;
   }
   swap(cpy);
 }
@@ -371,17 +397,26 @@ void topit::Vector< T >::insert(size_t i, const Vector< T >& rhs, size_t beg, si
   }
   size_t add = end - beg;
   Vector< int > cpy(size_ + add);
-  for (size_t j = 0; j < i; ++j)
+  try
   {
-    cpy[j] = (*this)[j];
+    for (; cpy.size_ < i; ++cpy.size_)
+    {
+      new (cpy.data_ + cpy.size_) T((*this)[cpy.size_]);
+    }
+    for (; cpy.size_ < i + add; ++cpy.size_)
+    {
+      new (cpy.data_ + cpy.size_) T(rhs[beg + cpy.size_ - i]);
+    }
+    for (; cpy.size_ < size_ + add; ++cpy.size_)
+    {
+      new (cpy.data_ + cpy.size_) T((*this)[cpy.size_ - add]);
+    }
   }
-  for (size_t j = i; j < i + add; ++j)
+  catch (...)
   {
-    cpy[j] = rhs[beg + j - i];
-  }
-  for (size_t j = i + add; j < cpy.getSize(); ++j)
-  {
-    cpy[j] = (*this)[j - add];
+    clear(cpy.data_, cpy.size_);
+    ::operator delete(cpy.data_);
+    throw;
   }
   swap(cpy);
 }
@@ -394,13 +429,22 @@ void topit::Vector< T >::erase(size_t i)
     throw std::out_of_range("Index is more than size");
   }
   Vector< T > cpy(size_ - 1);
-  for (size_t j = 0; j < i; ++j)
+  try
   {
-    cpy[j] = (*this)[j];
+    for (; cpy.size_ < i; ++cpy.size_)
+    {
+      new (cpy.data_ + cpy.size_) T((*this)[cpy.size_]);
+    }
+    for (; cpy.size_ < size_ - 1; ++cpy.size_)
+    {
+      new (cpy.data_ + cpy.size_) T((*this)[cpy.size_ + 1]);
+    }
   }
-  for (size_t j = i + 1; j < size_; ++j)
+  catch (...)
   {
-    cpy[j - 1] = (*this)[j];
+    clear(cpy.data_, cpy.size_);
+    ::operator delete(cpy.data_);
+    throw;
   }
   swap(cpy);
 }
@@ -413,14 +457,23 @@ void topit::Vector< T >::insert(size_t i, const T& val)
     throw std::out_of_range("Index is more than size");
   }
   Vector< T > cpy(size_ + 1);
-  for (size_t j = 0; j < i; ++j)
+  try
   {
-    cpy[j] = (*this)[j];
+    for (; cpy.size_ < i; ++cpy.size_)
+    {
+      new (cpy.data_ + cpy.size_) T((*this)[cpy.size_]);
+    }
+    new (cpy.data_ + cpy.size_++) T(val);
+    for (; cpy.size_ < size_ + 1; ++cpy.size_)
+    {
+      new (cpy.data_ + cpy.size_) T((*this)[cpy.size_ - 1]);
+    }
   }
-  cpy[i] = val;
-  for (size_t j = i + 1; j < cpy.getSize(); ++j)
+  catch (...)
   {
-    cpy[j] = (*this)[j - 1];
+    clear(cpy.data_, cpy.size_);
+    ::operator delete(cpy.data_);
+    throw;
   }
   swap(cpy);
 }
@@ -432,8 +485,7 @@ void topit::Vector< T >::popBack()
   {
     throw std::out_of_range("Vector is empty");
   }
-  data_[size_ - 1].~T();
-  --size_;
+  (data_ + --size_)->~T();
 }
 
 template < class T >
@@ -444,9 +496,18 @@ void topit::Vector< T >::popFront()
     throw std::out_of_range("Vector is empty");
   }
   Vector< T > cpy(size_ - 1);
-  for (size_t i = 1; i < size_; ++i)
+  try
   {
-    cpy[i - 1] = (*this)[i];
+    for (; cpy.size_ < size_ - 1; ++cpy.size_)
+    {
+      new (cpy.data_ + cpy.size_) T((*this)[cpy.size_ + 1]);
+    }
+  }
+  catch (...)
+  {
+    clear(cpy.data_, cpy.size_);
+    ::operator delete(cpy.data_);
+    throw;
   }
   swap(cpy);
 }
@@ -461,10 +522,19 @@ template < class T >
 void topit::Vector< T >::pushFront(const T& val)
 {
   Vector< T > cpy(size_ + 1);
-  cpy[0] = val;
-  for (size_t i = 1; i < cpy.getSize(); ++i)
+  try
   {
-    cpy[i] = (*this)[i - 1];
+    new (cpy.data_) T(val);
+    for (cpy.size_ = 1; cpy.size_ < size_ + 1; ++cpy.size_)
+    {
+      new (cpy.data_ + cpy.size_) T((*this)[cpy.size_ - 1]);
+    }
+  }
+  catch (...)
+  {
+    clear(cpy.data_, cpy.size_);
+    ::operator delete(cpy.data_);
+    throw;
   }
   swap(cpy);
 }
@@ -552,9 +622,17 @@ template < class T >
 topit::Vector< T >::Vector(const Vector< T >& rhs):
   Vector(rhs.getSize())
 {
-  for (size_t i = 0; i < getSize(); ++i)
+  try
   {
-    data_[i] = rhs[i];
+    for (; size_ < rhs.getSize(); ++size_)
+    {
+      new (data_ + size_) T(rhs[size_]);
+    }
+  }
+  catch (...)
+  {
+    clear(data_, size_);
+    throw;
   }
 }
 
@@ -583,11 +661,7 @@ topit::Vector< T >::Vector():
 template < class T >
 topit::Vector< T >::Vector::~Vector()
 {
-  for (size_t i = 0; i < getSize(); ++i)
-  {
-    (data_ + i)->~T();
-  }
-  ::operator delete(data_);
+  clear(data_, size_);
 }
 
 template < class T >
@@ -596,25 +670,9 @@ void topit::Vector< T >::pushBack(const T& val)
   if (size_ == capacity_)
   {
     size_t newCap = (capacity_ == 0 ? 1 : capacity_ * 2);
-    T* temp = new T[newCap];
-    try
-    {
-      for (size_t i = 0; i < capacity_; ++i)
-      {
-        temp[i] = data_[i];
-      }
-    }
-    catch (...)
-    {
-      delete[] temp;
-      throw;
-    }
-    delete[] data_;
-    data_ = temp;
-    capacity_ = newCap;
+    reserve(newCap);
   }
-
-  data_[size_++] = val;
+  new (data_ + size_++) T(val);
 }
 
 #endif
