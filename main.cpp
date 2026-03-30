@@ -766,6 +766,52 @@ bool testInitializerListConstructor()
   return v.getSize() == 2;
 }
 
+bool testInsertIterOneValueEmptyVector()
+{
+  topit::Vector< int > v;
+  try
+  {
+    v.insert(v.begin(), 1);
+    return v.getSize() == 1 && v[0] == 1;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
+bool testInsertIterOneValueNormal()
+{
+  topit::Vector< int > v{1, 2, 3};
+  try
+  {
+    v.insert(v.begin() + 1, 4);
+    return v.getSize() == 4 && v[0] == 1 && v[1] == 4 && v[2] == 2 && v[3] == 3;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
+bool testInsertIterOneValueIncorrectPos()
+{
+  topit::Vector< int > v{1, 2, 3};
+  try
+  {
+    v.insert(v.begin() + 5, 4);
+    return false;
+  }
+  catch (const std::out_of_range&)
+  {
+    return true;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
 int main()
 {
   using test_t = bool (*)();
@@ -818,7 +864,10 @@ int main()
       {"Insert when beg == end not change vector", testInsertFwdItersBegEqEnd},
       {"Insert when pos is incorrect throw an exception", testInsertFwdItersPosIncorrect},
       {"Correct insertion with iterators", testInsertFwdItersNormal},
-      {"Vector with initializer list must be same size as init-list", testInitializerListConstructor}};
+      {"Vector with initializer list must be same size as init-list", testInitializerListConstructor},
+      {"Insert in empty vector add elem in it", testInsertIterOneValueEmptyVector},
+      {"Correct insertion in vector", testInsertIterOneValueNormal},
+      {"Insertion in incorrect pos throw an exception", testInsertIterOneValueIncorrectPos}};
   const size_t count = sizeof(tests) / sizeof(pair_t);
   std::cout << std::boolalpha;
   bool pass = true;
