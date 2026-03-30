@@ -812,6 +812,56 @@ bool testInsertIterOneValueIncorrectPos()
   }
 }
 
+bool testInsertIterManyValueEmptyVector()
+{
+  topit::Vector< int > v;
+  try
+  {
+    v.insert(1, 2, v.begin());
+    return v.getSize() == 2 && v[0] == 1 && v[1] == 1;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
+bool testInsertIterMoreValueNormal()
+{
+  topit::Vector< int > v{1, 2, 3};
+  try
+  {
+    v.insert(4, 3, v.begin() + 2);
+    bool res = v.getSize() == 6;
+    res = res && v[0] == 1 && v[1] == 2;
+    res = res && v[2] == 4 && v[3] == 4;
+    res = res && v[4] == 4 && v[5] == 3;
+    return res;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
+bool testInsertIterManyValueIncorrectPos()
+{
+  topit::Vector< int > v{1, 2, 3};
+  try
+  {
+    v.insert(4, 5, v.begin() + 5);
+    return false;
+  }
+  catch (const std::out_of_range&)
+  {
+    return true;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
 int main()
 {
   using test_t = bool (*)();
@@ -867,7 +917,10 @@ int main()
       {"Vector with initializer list must be same size as init-list", testInitializerListConstructor},
       {"Insert in empty vector add elem in it", testInsertIterOneValueEmptyVector},
       {"Correct insertion in vector", testInsertIterOneValueNormal},
-      {"Insertion in incorrect pos throw an exception", testInsertIterOneValueIncorrectPos}};
+      {"Insertion in incorrect pos throw an exception", testInsertIterOneValueIncorrectPos},
+      {"Insert in empty vector add elem in it (many)", testInsertIterManyValueEmptyVector},
+      {"Correct insertion in vector (many)", testInsertIterMoreValueNormal},
+      {"Insertion in incorrect pos throw an exception (many)", testInsertIterManyValueIncorrectPos}};
   const size_t count = sizeof(tests) / sizeof(pair_t);
   std::cout << std::boolalpha;
   bool pass = true;
