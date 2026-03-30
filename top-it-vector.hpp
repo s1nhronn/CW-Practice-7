@@ -127,9 +127,9 @@ namespace topit
 }
 
 template < class T >
-void topit::Vector< T >::insert(VIter< T >, const T&)
+void topit::Vector< T >::insert(VIter< T > pos, const T& val)
 {
-  return;
+  insert(pos.pos_, val);
 }
 
 template < class T >
