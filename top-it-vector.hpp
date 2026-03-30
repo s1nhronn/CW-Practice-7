@@ -2,13 +2,20 @@
 #define TOP_IT_VECTOR_HPP
 #include <cassert>
 #include <cstddef>
+#include <initializer_list>
 #include <memory>
+#include <new>
 #include <stdexcept>
 #include <utility>
 
 // Домашнее задание
 // 1. Реализовать итераторы для вектора
 // 2. Придумать еще 3 insert и 3 erase, но с итераторами
+// 3. Протестировать
+
+// Домашнее задание 2
+// 1. Переделать работу с памятью: убедиться в том,
+//   что вектору не требуется конструктор по умолчанию (!)
 
 namespace topit
 {
@@ -57,6 +64,7 @@ namespace topit
     Vector();
     Vector(const Vector< T >&);
     Vector(Vector< T >&&) noexcept;
+    explicit Vector(std::initializer_list< T > il);
 
     ~Vector();
     Vector< T >& operator=(const Vector< T >&);
@@ -75,6 +83,8 @@ namespace topit
     bool isEmpty() const noexcept;
     size_t getSize() const noexcept;
     size_t getCapacity() const noexcept;
+    void reserve(size_t cap);
+    void shrinkToFit();
 
     T& operator[](size_t id) noexcept;
     const T& operator[](size_t id) const noexcept;
@@ -106,7 +116,52 @@ namespace topit
     size_t size_, capacity_;
 
     explicit Vector(size_t k);
+
+    // ! Классная работа
+    void pushBackImpl(const T&);
+    void reserve(size_t pos, size_t k);
   };
+}
+
+template < class T >
+void topit::Vector< T >::reserve(size_t cap)
+{
+  if (capacity_ >= cap)
+  {
+    return;
+  }
+  T* d = static_cast< T* >(::operator new(sizeof(T) * cap));
+  size_t i = 0;
+  try
+  {
+    for (; i < getSize(); ++i)
+    {
+      new (d + i) T(std::move(data_[i]));
+    }
+  }
+  catch (...)
+  {
+    for (size_t j = 0; j < i; ++j)
+    {
+      (d + i)->~T();
+    }
+    ::operator delete(d);
+    throw;
+  }
+  delete[] data_;
+  data_ = d;
+  capacity_ = cap;
+}
+
+template < class T >
+topit::Vector< T >::Vector(std::initializer_list< T > il):
+  Vector(il.size())
+{
+  size_t i = 0;
+  for (auto&& v : il)
+  {
+    data_[i++] = std::move(v);
+  }
 }
 
 template < class T >
@@ -464,8 +519,8 @@ size_t topit::Vector< T >::getSize() const noexcept
 
 template < class T >
 topit::Vector< T >::Vector(size_t k):
-  data_(new T[k]),
-  size_(k),
+  data_(static_cast< T* >(::operator new(sizeof(T) * k))),
+  size_(0),
   capacity_(k)
 {}
 
@@ -528,7 +583,11 @@ topit::Vector< T >::Vector():
 template < class T >
 topit::Vector< T >::Vector::~Vector()
 {
-  delete[] data_;
+  for (size_t i = 0; i < getSize(); ++i)
+  {
+    (data_ + i)->~T();
+  }
+  ::operator delete(data_);
 }
 
 template < class T >

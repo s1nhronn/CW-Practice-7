@@ -797,6 +797,12 @@ bool testInsertFwdItersNormal()
   }
 }
 
+bool testInitializerListConstructor()
+{
+  topit::Vector< int > v{1, 2};
+  return v.getSize() == 2;
+}
+
 int main()
 {
   using test_t = bool (*)();
@@ -850,7 +856,8 @@ int main()
       {"Insert when pos is incorrect throw an exception", testInsertFwdItersPosIncorrect},
       {"Insert when beg is incorrect throw an exception", testInsertFwdItersBegIncorrect},
       {"Insert when end is incorrect throw an exception", testInsertFwdItersEndIncorrect},
-      {"Correct insertion with iterators", testInsertFwdItersNormal}};
+      {"Correct insertion with iterators", testInsertFwdItersNormal},
+      {"Vector with initializer list must be same size as init-list", testInitializerListConstructor}};
   const size_t count = sizeof(tests) / sizeof(pair_t);
   std::cout << std::boolalpha;
   bool pass = true;
