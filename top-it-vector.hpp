@@ -183,16 +183,38 @@ topit::Vector< T >::Vector(std::initializer_list< T > il):
 
 template < class T >
 template < class FwdIterator >
-void topit::Vector< T >::insert(VIter< T >, FwdIterator, FwdIterator)
+void topit::Vector< T >::insert(VIter< T > pos, FwdIterator beg, FwdIterator end)
 {
+  size_t count = 0;
+  auto cpyBeg = beg;
+  while (cpyBeg != end)
+  {
+    ++count;
+    ++cpyBeg;
+  }
+  Vector< T > cpy(size_ + count);
   try
   {
-    at(0) = 1;
+    for (; cpy.size_ < pos.pos_; ++cpy.size_)
+    {
+      new (cpy.data_ + cpy.size_) T((*this).at(cpy.size_));
+    }
+    for (; beg != end; ++beg)
+    {
+      new (cpy.data_ + cpy.size_++) T(*beg);
+    }
+    for (; pos != (*this).end(); ++pos)
+    {
+      new (cpy.data_ + cpy.size_++) T(*pos);
+    }
   }
   catch (...)
   {
-    throw std::range_error("brrrr");
+    clear(cpy.data_, cpy.size_);
+    ::operator delete(cpy.data_);
+    throw;
   }
+  swap(cpy);
 }
 
 template < class T >
@@ -254,21 +276,13 @@ topit::VIter< T >& topit::VIter< T >::operator++() noexcept
 template < class T >
 const T& topit::VCIter< T >::operator*()
 {
-  if (pos_ >= v_.getSize())
-  {
-    throw std::out_of_range("Pos of iter more than size of vector");
-  }
-  return v_[pos_];
+  return v_.at(pos_);
 }
 
 template < class T >
 T& topit::VIter< T >::operator*()
 {
-  if (pos_ >= v_.getSize())
-  {
-    throw std::out_of_range("Pos of iter more than size of vector");
-  }
-  return v_[pos_];
+  return v_.at(pos_);
 }
 
 template < class T >
