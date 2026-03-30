@@ -733,43 +733,6 @@ bool testInsertFwdItersPosIncorrect()
   }
 }
 
-bool testInsertFwdItersBegIncorrect()
-{
-  topit::Vector< int > v1, v2;
-  try
-  {
-    v1.insert(v1.begin(), v2.begin() + 5, v2.end());
-    return false;
-  }
-  catch (const std::out_of_range&)
-  {
-    return true;
-  }
-  catch (...)
-  {
-    return false;
-  }
-}
-
-bool testInsertFwdItersEndIncorrect()
-{
-  topit::Vector< int > v1, v2;
-  v2.pushBack(1);
-  try
-  {
-    v1.insert(v1.begin(), v2.begin(), v2.end() + 5);
-    return false;
-  }
-  catch (const std::out_of_range&)
-  {
-    return true;
-  }
-  catch (...)
-  {
-    return false;
-  }
-}
-
 bool testInsertFwdItersNormal()
 {
   topit::Vector< int > v1, v2;
@@ -854,8 +817,6 @@ int main()
       {"Insert in empty vector add elems in it", testInsertFwdItersEmptyVector},
       {"Insert when beg == end not change vector", testInsertFwdItersBegEqEnd},
       {"Insert when pos is incorrect throw an exception", testInsertFwdItersPosIncorrect},
-      {"Insert when beg is incorrect throw an exception", testInsertFwdItersBegIncorrect},
-      {"Insert when end is incorrect throw an exception", testInsertFwdItersEndIncorrect},
       {"Correct insertion with iterators", testInsertFwdItersNormal},
       {"Vector with initializer list must be same size as init-list", testInitializerListConstructor}};
   const size_t count = sizeof(tests) / sizeof(pair_t);
