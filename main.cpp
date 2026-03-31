@@ -944,6 +944,70 @@ bool testEraseIterRangeNormal()
   }
 }
 
+bool testEraseIterOneEmptyVector()
+{
+  topit::Vector< int > v;
+  try
+  {
+    v.erase(v.begin());
+    return false;
+  }
+  catch (const std::out_of_range&)
+  {
+    return true;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
+bool testEraseIterOneVectorWithOneElem()
+{
+  topit::Vector< int > v{1};
+  try
+  {
+    v.erase(v.begin());
+    return v.isEmpty();
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
+bool testEraseIterOneVectorWithManyElems()
+{
+  topit::Vector< int > v{1, 2, 3};
+  try
+  {
+    v.erase(v.begin() + 1);
+    return v.getSize() == 2 && v[0] == 1 && v[1] == 3;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
+bool testEraseIterOneIncorrectPos()
+{
+  topit::Vector< int > v{1, 2, 3};
+  try
+  {
+    v.erase(v.end());
+    return false;
+  }
+  catch (const std::out_of_range&)
+  {
+    return true;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
 int main()
 {
   using test_t = bool (*)();
@@ -1007,7 +1071,11 @@ int main()
       {"Erase from vector with one elem make it empty (range iters)", testEraseIterRangeOneElement},
       {"Erase when end pos more than size throw an exception (range iters)", testEraseIterRangeEndPosMoreThenSize},
       {"Erase when beg pos more than end pos throw an exception (range iters)", testEraseIterRangeBegMoreThanEnd},
-      {"Correct result of normal erasing (range iters)", testEraseIterRangeNormal}};
+      {"Correct result of normal erasing (range iters)", testEraseIterRangeNormal},
+      {"Erase from empty vector throw an exception (one iter)", testEraseIterOneEmptyVector},
+      {"Erase from vector with one elem make it empty (one iter)", testEraseIterOneVectorWithOneElem},
+      {"Erase from vector with many elem delete elem from it (one iter)", testEraseIterOneVectorWithManyElems},
+      {"Erase from vector with incorrect pos throw an exception (one iter)", testEraseIterOneIncorrectPos}};
   const size_t count = sizeof(tests) / sizeof(pair_t);
   std::cout << std::boolalpha;
   bool pass = true;
