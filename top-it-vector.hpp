@@ -128,7 +128,10 @@ namespace topit
 
 template < class T >
 void topit::Vector< T >::shrinkToFit()
-{}
+{
+  Vector< T > cpy(*this);
+  swap(cpy);
+}
 
 template < class T >
 void topit::Vector< T >::reserve(size_t pos, size_t k)
