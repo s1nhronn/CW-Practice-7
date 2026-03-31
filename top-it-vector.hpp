@@ -127,6 +127,10 @@ namespace topit
 }
 
 template < class T >
+void topit::Vector< T >::shrinkToFit()
+{}
+
+template < class T >
 void topit::Vector< T >::reserve(size_t pos, size_t k)
 {
   if (pos > size_)
