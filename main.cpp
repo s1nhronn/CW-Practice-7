@@ -862,6 +862,88 @@ bool testInsertIterManyValueIncorrectPos()
   }
 }
 
+bool testEraseIterRangeEmptyVector()
+{
+  topit::Vector< int > v;
+  try
+  {
+    v.erase(v.begin(), v.end());
+    return false;
+  }
+  catch (const std::out_of_range&)
+  {
+    return true;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
+bool testEraseIterRangeOneElement()
+{
+  topit::Vector< int > v{1};
+  try
+  {
+    v.erase(v.begin(), v.end());
+    return v.isEmpty();
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
+bool testEraseIterRangeEndPosMoreThenSize()
+{
+  topit::Vector< int > v{1, 2, 3};
+  try
+  {
+    v.erase(v.begin(), v.end() + 1);
+    return false;
+  }
+  catch (const std::range_error&)
+  {
+    return true;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
+bool testEraseIterRangeBegMoreThanEnd()
+{
+  topit::Vector< int > v{1, 2, 3};
+  try
+  {
+    v.erase(v.end(), v.begin());
+    return false;
+  }
+  catch (const std::range_error&)
+  {
+    return true;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
+bool testEraseIterRangeNormal()
+{
+  topit::Vector< int > v{1, 2, 3, 4, 5};
+  try
+  {
+    v.erase(v.begin() + 1, v.begin() + 3);
+    return v.getSize() == 3 && v[0] == 1 && v[1] == 4 && v[2] == 5;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
 int main()
 {
   using test_t = bool (*)();
@@ -920,7 +1002,12 @@ int main()
       {"Insertion in incorrect pos throw an exception", testInsertIterOneValueIncorrectPos},
       {"Insert in empty vector add elem in it (many)", testInsertIterManyValueEmptyVector},
       {"Correct insertion in vector (many)", testInsertIterMoreValueNormal},
-      {"Insertion in incorrect pos throw an exception (many)", testInsertIterManyValueIncorrectPos}};
+      {"Insertion in incorrect pos throw an exception (many)", testInsertIterManyValueIncorrectPos},
+      {"Erase from empty vector throw an exception (range iters)", testEraseIterRangeEmptyVector},
+      {"Erase from vector with one elem make it empty (range iters)", testEraseIterRangeOneElement},
+      {"Erase when end pos more than size throw an exception (range iters)", testEraseIterRangeEndPosMoreThenSize},
+      {"Erase when beg pos more than end pos throw an exception (range iters)", testEraseIterRangeBegMoreThanEnd},
+      {"Correct result of normal erasing (range itersm)", testEraseIterRangeNormal}};
   const size_t count = sizeof(tests) / sizeof(pair_t);
   std::cout << std::boolalpha;
   bool pass = true;
