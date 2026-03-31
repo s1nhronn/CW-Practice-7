@@ -84,7 +84,7 @@ namespace topit
     size_t getSize() const noexcept;
     size_t getCapacity() const noexcept;
     void reserve(size_t cap);
-    void shrinkToFit();
+    void shrinkToFit(); // ! Классная работа
 
     T& operator[](size_t id) noexcept;
     const T& operator[](size_t id) const noexcept;
