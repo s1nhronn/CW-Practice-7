@@ -1072,6 +1072,14 @@ bool testEraseIterCountPosPlusCountMoreThenSize()
   }
 }
 
+bool testShrinkToFit()
+{
+  topit::Vector< int > v{1, 2, 3};
+  v.reserve(6);
+  v.shrinkToFit();
+  return v.getCapacity() == 3 && v.getCapacity() == v.getSize();
+}
+
 int main()
 {
   using test_t = bool (*)();
@@ -1143,7 +1151,8 @@ int main()
       {"Erase from empty vector throw an exception (iter + count)", testEraseIterCountEmptyVector},
       {"Erase one elem make vector is empty (iter + count)", testEraseIterCountOneElem},
       {"Erase many elem remove they (iter + count)", testEraseIterCountManyElem},
-      {"Erase when pos + count more than size throw an exception", testEraseIterCountPosPlusCountMoreThenSize}};
+      {"Erase when pos + count more than size throw an exception", testEraseIterCountPosPlusCountMoreThenSize},
+      {"Make capacity equal to size", testShrinkToFit}};
   const size_t count = sizeof(tests) / sizeof(pair_t);
   std::cout << std::boolalpha;
   bool pass = true;
