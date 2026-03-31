@@ -84,7 +84,7 @@ namespace topit
     size_t getSize() const noexcept;
     size_t getCapacity() const noexcept;
     void reserve(size_t cap);
-    void shrinkToFit(); // ! Классная работа
+    void shrinkToFit();
 
     T& operator[](size_t id) noexcept;
     const T& operator[](size_t id) const noexcept;
@@ -117,13 +117,65 @@ namespace topit
 
     explicit Vector(size_t k);
 
-    // ! Классная работа
+    // Классная работа (выполнено)
     void pushBackImpl(const T&);
     void reserve(size_t pos, size_t k);
   };
 
   template < class T >
   void clear(T* data, size_t to_pos);
+}
+
+template < class T >
+void topit::Vector< T >::reserve(size_t pos, size_t k)
+{
+  if (pos > size_)
+  {
+    throw std::out_of_range("Pos more than size");
+  }
+  Vector< T > cpy(size_ + k);
+  try
+  {
+    for (; cpy.size_ < pos; ++cpy.size_)
+    {
+      new (cpy.data_ + cpy.size_) T((*this)[cpy.size_]);
+    }
+    cpy.size_ += k;
+    for (; cpy.size_ != size_ + k; ++cpy.size_)
+    {
+      new (cpy.data_ + cpy.size_) T((*this)[cpy.size_ - k]);
+    }
+    swap(cpy);
+  }
+  catch (...)
+  {
+    if (cpy.size_ < pos)
+    {
+      for (size_t i = 0; i < pos; ++i)
+      {
+        (cpy.data_ + i)->~T();
+      }
+      for (size_t i = pos; i < cpy.size_; ++i)
+      {
+        (cpy.data_ + i)->~T();
+      }
+    }
+    else
+    {
+      for (size_t i = 0; i < cpy.size_; ++i)
+      {
+        (cpy.data_ + i)->~T();
+      }
+    }
+    ::operator delete(cpy.data_);
+    throw;
+  }
+}
+
+template < class T >
+void topit::Vector< T >::pushBackImpl(const T& val)
+{
+  new (data_ + size_++) T(val);
 }
 
 template < class T >
@@ -738,7 +790,7 @@ void topit::Vector< T >::pushBack(const T& val)
     size_t newCap = (capacity_ == 0 ? 1 : capacity_ * 2);
     reserve(newCap);
   }
-  new (data_ + size_++) T(val);
+  pushBackImpl(val);
 }
 
 #endif
