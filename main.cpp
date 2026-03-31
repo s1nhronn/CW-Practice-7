@@ -1143,7 +1143,7 @@ int main()
       {"Erase from empty vector throw an exception (iter + count)", testEraseIterCountEmptyVector},
       {"Erase one elem make vector is empty (iter + count)", testEraseIterCountOneElem},
       {"Erase many elem remove they (iter + count)", testEraseIterCountManyElem},
-      {"Erase whe pos + count more than size throw an exception", testEraseIterCountPosPlusCountMoreThenSize}};
+      {"Erase when pos + count more than size throw an exception", testEraseIterCountPosPlusCountMoreThenSize}};
   const size_t count = sizeof(tests) / sizeof(pair_t);
   std::cout << std::boolalpha;
   bool pass = true;

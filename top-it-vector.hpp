@@ -127,6 +127,10 @@ namespace topit
 }
 
 template < class T >
+void topit::Vector< T >::erase(VIter< T >, size_t)
+{}
+
+template < class T >
 void topit::Vector< T >::erase(VIter< T > pos)
 {
   erase(pos.pos_);
