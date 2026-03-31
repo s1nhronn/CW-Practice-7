@@ -127,6 +127,10 @@ namespace topit
 }
 
 template < class T >
+void topit::Vector< T >::erase(VIter< T >, VIter< T >)
+{}
+
+template < class T >
 void topit::Vector< T >::insert(const T& value, size_t count, VIter< T > pos)
 {
   Vector< T > cpy(size_ + count);

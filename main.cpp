@@ -1007,7 +1007,7 @@ int main()
       {"Erase from vector with one elem make it empty (range iters)", testEraseIterRangeOneElement},
       {"Erase when end pos more than size throw an exception (range iters)", testEraseIterRangeEndPosMoreThenSize},
       {"Erase when beg pos more than end pos throw an exception (range iters)", testEraseIterRangeBegMoreThanEnd},
-      {"Correct result of normal erasing (range itersm)", testEraseIterRangeNormal}};
+      {"Correct result of normal erasing (range iters)", testEraseIterRangeNormal}};
   const size_t count = sizeof(tests) / sizeof(pair_t);
   std::cout << std::boolalpha;
   bool pass = true;
