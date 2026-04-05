@@ -147,36 +147,25 @@ void topit::Vector< T >::reserve(size_t pos, size_t k)
     {
       new (cpy.data_ + cpy.size_) T((*this)[cpy.size_]);
     }
-    cpy.size_ += k;
-    for (; cpy.size_ != size_ + k; ++cpy.size_)
+    for (; cpy.size_ < size_; ++cpy.size_)
     {
-      new (cpy.data_ + cpy.size_) T((*this)[cpy.size_ - k]);
+      new (cpy.data_ + cpy.size_ + k) T((*this)[cpy.size_]);
     }
-    swap(cpy);
   }
   catch (...)
   {
-    if (cpy.size_ < pos)
+    for (size_t i = 0; i < pos; ++i)
     {
-      for (size_t i = 0; i < pos; ++i)
-      {
-        (cpy.data_ + i)->~T();
-      }
-      for (size_t i = pos; i < cpy.size_; ++i)
-      {
-        (cpy.data_ + i)->~T();
-      }
+      (cpy.data_ + i)->~T();
     }
-    else
+    for (size_t i = pos; i < cpy.size_; ++i)
     {
-      for (size_t i = 0; i < cpy.size_; ++i)
-      {
-        (cpy.data_ + i)->~T();
-      }
+      (cpy.data_ + i + k)->~T();
     }
     ::operator delete(cpy.data_);
     throw;
   }
+  swap(cpy);
 }
 
 template < class T >
