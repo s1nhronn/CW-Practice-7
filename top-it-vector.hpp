@@ -521,7 +521,7 @@ void topit::Vector< T >::insert(size_t i, const Vector< T >& rhs, size_t beg, si
     throw std::range_error("End less than begin");
   }
   size_t add = end - beg;
-  Vector< int > cpy(size_ + add);
+  Vector< T > cpy(size_ + add);
   try
   {
     for (; cpy.size_ < i; ++cpy.size_)
